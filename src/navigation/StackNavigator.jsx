@@ -17,7 +17,7 @@ export default function StackNavigator() {
       <Stack.Screen
         name="Detail"
         component={DetailScreen}
-        options={{ title: 'Detail' }}
+        options={{ title: 'Book Detail', headerTitleAlign: 'center' }}
       />
     </Stack.Navigator>
   );

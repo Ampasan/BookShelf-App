@@ -35,6 +35,7 @@ export default function TabNavigator() {
       initialRouteName="Home"
       screenOptions={({ route }) => ({
         headerShown: true,
+        headerTitle: 'BookShelf',
         tabBarShowLabel: true,
         tabBarActiveTintColor: '#00D564',
         tabBarInactiveTintColor: '#6b7280',
