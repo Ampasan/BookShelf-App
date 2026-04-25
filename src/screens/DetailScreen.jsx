@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -6,6 +6,7 @@ import useFetch from '../hooks/useFetch';
 import LoadingIndicator from '../components/LoadingIndicator';
 import ErrorState from '../components/ErrorState';
 import { fetchAuthor, fetchWorkDetail, fetchWorkEditions } from '../services/api';
+import useFavoriteStore from '../store/useFavoriteStore';
 
 function pickWorkId(routeParams) {
   const p = routeParams ?? {};
@@ -76,7 +77,10 @@ function InfoRow({ label, value }) {
 
 export default function DetailScreen({ route }) {
   const workId = pickWorkId(route?.params);
-  const [fav, setFav] = useState(false);
+
+  const favorites = useFavoriteStore((s) => s.favorites);
+  const addFavorite = useFavoriteStore((s) => s.addFavorite);
+  const removeFavorite = useFavoriteStore((s) => s.removeFavorite);
 
   const fetcher = useCallback(() => buildBookDetail(workId), [workId]);
   const { data, loading, error, refetch } = useFetch(fetcher, [fetcher]);
@@ -84,6 +88,7 @@ export default function DetailScreen({ route }) {
   const viewModel = useMemo(() => {
     const work = data?.work ?? null;
     const edition = data?.edition ?? null;
+    const coverId = Array.isArray(work?.covers) ? work.covers[0] : null;
     const coverUri = coverUriFromWork(work);
     const title = textValue(work?.title) || textValue(edition?.title) || 'Untitled';
 
@@ -110,6 +115,7 @@ export default function DetailScreen({ route }) {
     const pages = Number.isFinite(edition?.number_of_pages) ? String(edition.number_of_pages) : '';
 
     return {
+      coverId: Number.isFinite(coverId) ? coverId : null,
       coverUri,
       title,
       editionName,
@@ -121,6 +127,24 @@ export default function DetailScreen({ route }) {
       description,
     };
   }, [data]);
+
+  const isFavorite = useMemo(() => favorites.some((b) => b?.id === workId), [favorites, workId]);
+
+  const toggleFavorite = useCallback(() => {
+    if (!workId) return;
+
+    if (isFavorite) {
+      removeFavorite(workId);
+      return;
+    }
+
+    addFavorite({
+      id: workId,
+      title: viewModel.title,
+      author: viewModel.authorLine,
+      coverId: viewModel.coverId,
+    });
+  }, [addFavorite, isFavorite, removeFavorite, viewModel, workId]);
 
   if (!workId) {
     return (
@@ -170,10 +194,12 @@ export default function DetailScreen({ route }) {
             </View>
 
             <Pressable
-              onPress={() => setFav((v) => !v)}
-              style={[styles.button, fav ? styles.buttonActive : null]}
+              onPress={toggleFavorite}
+              style={[styles.button, isFavorite ? styles.buttonActive : null]}
             >
-              <Text style={styles.buttonText}>{fav ? 'Tersimpan di Favorit' : 'Tambah ke Favorit'}</Text>
+              <Text style={styles.buttonText}>
+                {isFavorite ? 'Hapus dari Favorit' : 'Tambah ke Favorit'}
+              </Text>
             </Pressable>
           </View>
         </View>
