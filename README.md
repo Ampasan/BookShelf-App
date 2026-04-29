@@ -53,31 +53,31 @@ Tema yang dipilih adalah Tema C (BookShelf)
 ### Home Screen
 
 <p align="center">
-  <img src="./Screenshots/home.jpeg" alt="home" width="250" />
+  <img src="./screenshots/home.jpeg" alt="home" width="250" />
 </p>
 
 ### Detail Screen
 
 <p align="center">
-  <img src="./Screenshots/detail.jpeg" alt="detail" width="250" />
+  <img src="./screenshots/detail.jpeg" alt="detail" width="250" />
 </p>
 
 ### Favorite Screen
 
 <p align="center">
-  <img src="./Screenshots/favorit.jpeg" alt="favorite" width="250" />
+  <img src="./screenshots/favorit.jpeg" alt="favorite" width="250" />
 </p>
 
 ### Search Screen
 
 <p align="center">
-  <img src="./Screenshots/search.jpeg" alt="search" width="250" />
+  <img src="./screenshots/search.jpeg" alt="search" width="250" />
 </p>
 
 ### About Screen
 
 <p align="center">
-  <img src="./Screenshots/about.jpeg" alt="search" width="250" />
+  <img src="./screenshots/about.jpeg" alt="search" width="250" />
 </p>
 
 ## Link video demo
